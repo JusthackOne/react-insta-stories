@@ -28,6 +28,10 @@ export const renderer: Renderer = ({ story, action, isPaused, config, messageHan
     }
   }, [isPaused]);
 
+  React.useEffect(() => {
+    setMuted(globalContext.isMuted);
+  }, [globalContext.isMuted]);
+
   const onWaiting = () => {
     action("pause", true);
   };
