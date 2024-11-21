@@ -33,6 +33,7 @@ const ReactInstaStories = function (props: ReactInstaStoriesProps) {
         keyboardNavigation: props.keyboardNavigation,
         preventDefault: props.preventDefault,
         preloadCount: props.preloadCount,
+        isMuted: props.isMuted
     }
     const [stories, setStories] = useState<{ stories: Story[] }>({ stories: generateStories(props.stories, renderers) });
 

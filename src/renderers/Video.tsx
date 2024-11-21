@@ -1,18 +1,14 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import Spinner from "../components/Spinner";
-import { Renderer, Tester } from "./../interfaces";
+import { GlobalCtx, Renderer, Tester } from "./../interfaces";
 import WithHeader from "./wrappers/withHeader";
 import WithSeeMore from "./wrappers/withSeeMore";
+import GlobalContext from "../context/Global";
 
-export const renderer: Renderer = ({
-  story,
-  action,
-  isPaused,
-  config,
-  messageHandler,
-}) => {
+export const renderer: Renderer = ({ story, action, isPaused, config, messageHandler }) => {
+  const globalContext = useContext<GlobalCtx>(GlobalContext);
   const [loaded, setLoaded] = React.useState(false);
-  const [muted, setMuted] = React.useState(story.muted || false);
+  const [muted, setMuted] = React.useState(globalContext.isMuted || false);
   const { width, height, loader, storyStyles } = config;
 
   let computedStyles = {
