@@ -5,8 +5,7 @@ import WithHeader from "./wrappers/withHeader";
 import WithSeeMore from "./wrappers/withSeeMore";
 import GlobalContext from "../context/Global";
 
-export const renderer: Renderer = ({ story, action, isPaused, config, messageHandler }) => {
-  const globalContext = useContext<GlobalCtx>(GlobalContext);
+export const renderer: Renderer = ({ story, action, isPaused, config, messageHandler, isMuted }) => {
   const [loaded, setLoaded] = React.useState(false);
 
   const { width, height, loader, storyStyles } = config;
@@ -30,9 +29,10 @@ export const renderer: Renderer = ({ story, action, isPaused, config, messageHan
 
   React.useEffect(() => {
     if (vid.current) {
-      vid.current.muted = globalContext.isMuted; // Устанавливаем mute для видео на основе контекста
+      vid.current.muted = isMuted;
     }
-  }, [globalContext.isMuted]); // Переподключаемся, когда isMuted изменяется
+  }, [isMuted]);
+
   const onWaiting = () => {
     action("pause", true);
   };
@@ -69,7 +69,6 @@ export const renderer: Renderer = ({ story, action, isPaused, config, messageHan
             playsInline
             onWaiting={onWaiting}
             onPlaying={onPlaying}
-            muted={globalContext.isMuted} // Прямая привязка к глобальному контексту
             autoPlay
             webkit-playsinline="true"
           />

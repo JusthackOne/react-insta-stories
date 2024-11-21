@@ -4,16 +4,14 @@ import StoriesContext from "./../context/Stories";
 import ProgressContext from "./../context/Progress";
 import Story from "./Story";
 import ProgressArray from "./ProgressArray";
-import {
-  GlobalCtx,
-  StoriesContext as StoriesContextInterface,
-} from "./../interfaces";
+import { GlobalCtx, StoriesContext as StoriesContextInterface } from "./../interfaces";
 import useIsMounted from "./../util/use-is-mounted";
 import { usePreLoader } from "../util/usePreLoader";
 
 export default function () {
   const [currentId, setCurrentId] = useState<number>(0);
   const [pause, setPause] = useState<boolean>(true);
+  const [muted, setMuted] = useState<boolean>(false);
   const [bufferAction, setBufferAction] = useState<boolean>(true);
   const [videoDuration, setVideoDuration] = useState<number>(0);
   const isMounted = useIsMounted();
@@ -33,6 +31,7 @@ export default function () {
     onPrevious,
     onNext,
     preloadCount,
+    isMuted,
   } = useContext<GlobalCtx>(GlobalContext);
   const { stories } = useContext<StoriesContextInterface>(StoriesContext);
 
@@ -51,7 +50,6 @@ export default function () {
     }
   }, [currentIndex]);
 
-
   useEffect(() => {
     if (typeof isPaused === "boolean") {
       setPause(isPaused);
@@ -59,12 +57,14 @@ export default function () {
   }, [isPaused]);
 
   useEffect(() => {
+    if (typeof isMuted === "boolean") {
+      setMuted(isMuted);
+    }
+  }, [isMuted]);
+
+  useEffect(() => {
     const isClient = typeof window !== "undefined" && window.document;
-    if (
-      isClient &&
-      typeof keyboardNavigation === "boolean" &&
-      keyboardNavigation
-    ) {
+    if (isClient && typeof keyboardNavigation === "boolean" && keyboardNavigation) {
       document.addEventListener("keydown", handleKeyDown);
       return () => {
         document.removeEventListener("keydown", handleKeyDown);
@@ -135,16 +135,15 @@ export default function () {
     }, 200);
   };
 
-  const mouseUp =
-    (type: string) => (e: React.MouseEvent | React.TouchEvent) => {
-      e.preventDefault();
-      mousedownId.current && clearTimeout(mousedownId.current);
-      if (pause) {
-        toggleState("play");
-      } else {
-        type === "next" ? next({ isSkippedByUser: true }) : previous();
-      }
-    };
+  const mouseUp = (type: string) => (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    mousedownId.current && clearTimeout(mousedownId.current);
+    if (pause) {
+      toggleState("play");
+    } else {
+      type === "next" ? next({ isSkippedByUser: true }) : previous();
+    }
+  };
 
   const getVideoDuration = (duration: number) => {
     setVideoDuration(duration * 1000);
@@ -170,6 +169,7 @@ export default function () {
         <ProgressArray />
       </ProgressContext.Provider>
       <Story
+        isMuted={muted}
         action={toggleState}
         bufferAction={bufferAction}
         playState={pause}
@@ -204,7 +204,7 @@ const styles = {
     flexDirection: "column" as const,
     background: "#111",
     position: "relative" as const,
-    WebkitUserSelect: 'none' as const,
+    WebkitUserSelect: "none" as const,
   },
   overlay: {
     position: "absolute" as const,

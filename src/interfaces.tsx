@@ -70,6 +70,7 @@ export interface StoriesContext {
 export interface ContainerState {
   currentId: number;
   pause: boolean;
+  isMuted?: boolean;
   count: number;
   storiesDone: number;
 }
@@ -78,6 +79,7 @@ export type Action = (action: string, bufferAction?: boolean) => void;
 export type Renderer = React.FC<{
   action: Action;
   isPaused: boolean;
+  isMuted?: boolean;
   story: Story;
   config: {
     width?: NumberOrString;
@@ -97,6 +99,7 @@ export type Tester = (story: Story) => {
 export interface StoryProps {
   story: Story;
   action: Action;
+  isMuted?: boolean;
   playState: boolean;
   getVideoDuration: Function;
   bufferAction: boolean;
