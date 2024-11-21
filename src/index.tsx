@@ -10,34 +10,32 @@ import withSeeMore from "./renderers/wrappers/withSeeMore";
 
 const ReactInstaStories = function (props: ReactInstaStoriesProps) {
   let renderers = props.renderers ? props.renderers.concat(defaultRenderers) : defaultRenderers;
-  const context: GlobalCtx = React.useMemo(
-    () => ({
-      width: props.width,
-      height: props.height,
-      loader: props.loader,
-      header: props.header,
-      storyContainerStyles: props.storyContainerStyles,
-      storyInnerContainerStyles: props.storyInnerContainerStyles,
-      storyStyles: props.storyStyles,
-      progressContainerStyles: props.progressContainerStyles,
-      progressWrapperStyles: props.progressWrapperStyles,
-      progressStyles: props.progressStyles,
-      loop: props.loop,
-      defaultInterval: props.defaultInterval,
-      isPaused: props.isPaused,
-      currentIndex: props.currentIndex,
-      onStoryStart: props.onStoryStart,
-      onStoryEnd: props.onStoryEnd,
-      onAllStoriesEnd: props.onAllStoriesEnd,
-      onNext: props.onNext,
-      onPrevious: props.onPrevious,
-      keyboardNavigation: props.keyboardNavigation,
-      preventDefault: props.preventDefault,
-      preloadCount: props.preloadCount,
-      isMuted: props.isMuted, // Обновляйте контекст при изменении isMuted
-    }),
-    [props]
-  ); // Следит за props, если они меняются
+  const [context, setContext] = useState<GlobalCtx>({
+    width: props.width,
+    height: props.height,
+    loader: props.loader,
+    header: props.header,
+    storyContainerStyles: props.storyContainerStyles,
+    storyInnerContainerStyles: props.storyInnerContainerStyles,
+    storyStyles: props.storyStyles,
+    progressContainerStyles: props.progressContainerStyles,
+    progressWrapperStyles: props.progressWrapperStyles,
+    progressStyles: props.progressStyles,
+    loop: props.loop,
+    defaultInterval: props.defaultInterval,
+    isPaused: props.isPaused,
+    currentIndex: props.currentIndex,
+    onStoryStart: props.onStoryStart,
+    onStoryEnd: props.onStoryEnd,
+    onAllStoriesEnd: props.onAllStoriesEnd,
+    onNext: props.onNext,
+    onPrevious: props.onPrevious,
+    keyboardNavigation: props.keyboardNavigation,
+    preventDefault: props.preventDefault,
+    preloadCount: props.preloadCount,
+    isMuted: props.isMuted,
+  });
+
   const [stories, setStories] = useState<{ stories: Story[] }>({ stories: generateStories(props.stories, renderers) });
 
   useEffect(() => {
@@ -45,7 +43,7 @@ const ReactInstaStories = function (props: ReactInstaStoriesProps) {
   }, [props.stories, props.renderers]);
 
   useEffect(() => {
-    context.isMuted = props.isMuted; // Обновляем значение, если пропс изменился
+    setContext((prev) => ({ ...prev, isMuted: props.isMuted }));
   }, [props.isMuted]);
 
   return (
