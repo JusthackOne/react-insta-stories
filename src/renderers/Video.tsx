@@ -28,8 +28,10 @@ export const renderer: Renderer = ({ story, action, isPaused, config, messageHan
   }, [isPaused]);
 
   React.useEffect(() => {
-    if (vid.current) {
-      vid.current.muted = isMuted;
+    if (typeof isMuted === "boolean") {
+      if (vid.current) {
+        vid.current.muted = isMuted;
+      }
     }
   }, [isMuted]);
 
