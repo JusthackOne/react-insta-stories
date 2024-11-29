@@ -63,6 +63,7 @@ export const renderer: Renderer = ({ story, action, isPaused, config, messageHan
       <WithSeeMore {...{ story, action }}>
         <div style={styles.videoContainer}>
           <video
+            muted={isMuted}
             ref={vid}
             style={computedStyles}
             src={story.url}
