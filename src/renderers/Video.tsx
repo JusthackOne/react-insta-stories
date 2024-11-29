@@ -1,9 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import Spinner from "../components/Spinner";
-import { GlobalCtx, Renderer, Tester } from "./../interfaces";
+import { Renderer, Tester } from "./../interfaces";
 import WithHeader from "./wrappers/withHeader";
 import WithSeeMore from "./wrappers/withSeeMore";
-import GlobalContext from "../context/Global";
 
 export const renderer: Renderer = ({ story, action, isPaused, config, messageHandler, isMuted }) => {
   const [loaded, setLoaded] = React.useState(false);

@@ -36,15 +36,21 @@ const ReactInstaStories = function (props: ReactInstaStoriesProps) {
     isMuted: props.isMuted,
   });
 
-  const [stories, setStories] = useState<{ stories: Story[] }>({ stories: generateStories(props.stories, renderers) });
+  const [stories, setStories] = useState<{ stories: Story[] }>({
+    stories: generateStories(props.stories, renderers),
+  });
 
   useEffect(() => {
     setStories({ stories: generateStories(props.stories, renderers) });
   }, [props.stories, props.renderers]);
 
   useEffect(() => {
-    setContext((prev) => ({ ...prev, isMuted: props.isMuted }));
-  }, [props.isMuted]);
+    setContext((prev) => ({
+      ...prev,
+      isMuted: props.isMuted,
+      header: props.header,
+    }));
+  }, [props.isMuted, props.header]);
 
   return (
     <GlobalContext.Provider value={context}>
