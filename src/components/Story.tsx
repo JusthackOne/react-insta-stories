@@ -5,7 +5,7 @@ import GlobalContext from "./../context/Global";
 const Story = (props: StoryProps) => {
   const globalContext = useContext<GlobalCtx>(GlobalContext);
 
-  const { width, height, loader, header, storyStyles, storyInnerContainerStyles = {} } = globalContext;
+  const { width, height, loader, header, storyStyles, isMuted, storyInnerContainerStyles = {} } = globalContext;
 
   const rendererMessageHandler = (type: string, data: any) => {
     switch (type) {
@@ -20,7 +20,7 @@ const Story = (props: StoryProps) => {
     let config = { width, height, loader, header, storyStyles };
     return (
       <InnerContent
-        isMuted={props.isMuted}
+        isMuted={isMuted}
         action={props.action}
         isPaused={props.playState}
         story={props.story}

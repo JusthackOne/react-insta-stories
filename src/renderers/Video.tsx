@@ -6,7 +6,6 @@ import WithSeeMore from "./wrappers/withSeeMore";
 import GlobalContext from "../context/Global";
 
 export const renderer: Renderer = ({ story, action, isPaused, config, messageHandler, isMuted }) => {
-  const { isMuted: muted } = useContext<GlobalCtx>(GlobalContext);
   const [loaded, setLoaded] = React.useState(false);
 
   const { width, height, loader, storyStyles } = config;
@@ -29,12 +28,12 @@ export const renderer: Renderer = ({ story, action, isPaused, config, messageHan
   }, [isPaused]);
 
   React.useEffect(() => {
-    if (typeof muted === "boolean") {
+    if (typeof isMuted === "boolean") {
       if (vid.current) {
-        vid.current.muted = muted;
+        vid.current.muted = isMuted;
       }
     }
-  }, [muted]);
+  }, [isMuted]);
 
   const onWaiting = () => {
     action("pause", true);
@@ -64,7 +63,7 @@ export const renderer: Renderer = ({ story, action, isPaused, config, messageHan
       <WithSeeMore {...{ story, action }}>
         <div style={styles.videoContainer}>
           <video
-            muted={muted}
+            muted={isMuted}
             ref={vid}
             style={computedStyles}
             src={story.url}
